@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using VI.TimeSheets.Repository;
@@ -17,52 +18,75 @@ namespace VI.Timesheets.API.Controllers
         {
             _logger = logger;
             _repository = repository;
-
         }
+
         [HttpGet]
-
-        public List<Person> GetAll()
+        public ActionResult GetAll()
         {
-            return _repository.GetAll();
+            return Ok(_repository.GetAll());
         }
-
-
 
         [HttpGet]
         [Route("name")]
-        public List<Person> GetByName(string name)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<Person>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult GetByName(string name)
         {
-            return _repository.GetByName(name);
+            if ((_repository.GetByName(name)).Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(_repository.GetByName(name));
         }
+
         [HttpGet]
         [Route("{id}")]
-        public Person GetById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Person))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult GetById(int id)
         {
-            return _repository.GetById(id);
+            if (_repository.GetById(id) == null)
+            {
+                return NotFound();
+            }           
+            return Ok(_repository.GetById(id));
         }
+
         [HttpGet]
         [Route("{skip}, {take}")]
-        public List<Person> GetPaginationC(int skip, int take)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<Person>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult GetPagination(int skip, int take)
         {
-            return _repository.GetPagination(skip, take);
+            if (_repository.GetPagination(skip, take).Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(_repository.GetPagination(skip, take));
         }
+
         [HttpPost]
         [Route("{person}")]
-        public void AddPerson(Person person)
+        public ActionResult AddPerson(Person person)
         {
             _repository.AddPerson(person);
+            return Ok();
         }
+
         [HttpDelete]
         [Route("{id}")]
-        public void DeletePerson(int id)
+        public ActionResult DeletePerson(int id)
         {
             _repository.DeletePerson(id);
+            return Ok();
         }
+
         [HttpPut]
-        [Route("{person}, lastName, ")]
-        public void UpdatePersone(int id, string lastName, string email, string company)
+        [Route("{person}")]
+        public ActionResult UpdatePersone(int id, string lastName, string email, string company)
         {
-            _repository.UpdatePerson(GetById(id), lastName, email, company);
+            _repository.UpdatePerson(_repository.GetById(id), lastName, email, company);
+            return Ok();
         }
     }
 }

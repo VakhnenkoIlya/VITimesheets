@@ -60,7 +60,7 @@ namespace VI.TimeSheets.Repository
         new Person { Id = 49, FirstName = "Jenette", LastName = "Dejesus", Email = "adipiscing.Mauris.molestie@liberoduinec.ca", Company = "Lectus Justo Incorporated", Age = 56 },
         new Person { Id = 50, FirstName = "Ramona", LastName = "Gilliam", Email = "massa.Vestibulum@lectuspede.ca", Company = "Imperdiet Dictum LLP", Age = 24 },
         };
-        public List<Person> GetAll()
+        public IReadOnlyCollection<Person> GetAll()
         {
             return data;
         }
@@ -85,7 +85,7 @@ namespace VI.TimeSheets.Repository
             return result;
         }
 
-        public List<Person> GetByName(string name)
+        public IReadOnlyCollection<Person> GetByName(string name)
         {
             List<Person> result = new();
             foreach (Person person in data)
@@ -94,11 +94,11 @@ namespace VI.TimeSheets.Repository
             return result;
         }
 
-        public List<Person> GetPagination(int skip, int take)
+        public IReadOnlyCollection<Person> GetPagination(int skip, int take)
         {
             List<Person> result = new();
             for (int i = skip; i < take + skip; i++)
-            {
+           {
                 if (i >= data.Count)
                     break;
                 result.Add(data[i]);
