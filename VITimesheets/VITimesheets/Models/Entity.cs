@@ -7,6 +7,6 @@ namespace VI.Timesheets.API.Models
 {
     public class Entity
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }

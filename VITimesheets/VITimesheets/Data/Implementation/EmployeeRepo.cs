@@ -14,12 +14,12 @@ namespace VI.Timesheets.API.Data.Implementation
             throw new NotImplementedException();
         }
 
-        public Task Delete(Guid id)
+        public Task Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Employee> GetItem(Guid id)
+        public Task<Employee> GetItem(int id)
         {
             throw new NotImplementedException();
         }

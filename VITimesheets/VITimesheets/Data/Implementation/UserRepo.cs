@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,30 +16,28 @@ namespace VI.Timesheets.API.Data.Implementation
         {
             _context = context;
         }
-        public async Task Add(User item)
+
+        public async Task Add(User entity)
         {
-            _context.Add(item);
+            _context.Add(entity);
             await _context.SaveChangesAsync();
         }
 
-        public Task CreateUser(User user)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            _context.Remove(_context.Users.Find(id));
+            await _context.SaveChangesAsync();
         }
 
-        public Task Delete(Guid id)
+        public async Task<User> GetItem(int id)
         {
-            throw new NotImplementedException();
+            var result = await _context.Users.FindAsync(id);
+            return result;
         }
 
-        public Task<User> GetItem(Guid id)
+        public async Task Update(User entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task Update(User item)
-        {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
         }
     }
 }
