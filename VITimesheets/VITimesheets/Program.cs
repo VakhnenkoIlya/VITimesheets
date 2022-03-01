@@ -6,15 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VI.TimeSheets.Repository;
+using VI.Timesheets.API.Data.EFCore;
+using VI.Timesheets.API.Data.Implementation;
+using VI.Timesheets.API.Models.Entities;
 
 namespace VITimesheets
 {
     public class Program
     {
         public static void Main(string[] args)
-        {
-            Repository repository = new();
+        { 
             CreateHostBuilder(args).Build().Run();
         }
 

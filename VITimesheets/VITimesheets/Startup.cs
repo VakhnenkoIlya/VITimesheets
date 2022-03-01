@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +12,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VI.TimeSheets.Repository;
+using VI.Timesheets.API.Data;
+using VI.Timesheets.API.Data.EFCore;
+using VI.Timesheets.API.Data.Implementation;
+using VI.Timesheets.API.Data.Interfaces;
+using VI.Timesheets.API.Models.Entities;
+
 
 namespace VITimesheets
 {
@@ -26,13 +32,15 @@ namespace VITimesheets
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton<IRepository, Repository>();
+        {             
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VITimesheets", Version = "v1" });
             });
+           
+            services.AddDbContext<TimesheetDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("timesheets")));
+            services.AddScoped<IUserRepo, UserRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
